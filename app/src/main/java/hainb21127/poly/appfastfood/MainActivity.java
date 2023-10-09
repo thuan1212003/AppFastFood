@@ -47,25 +47,40 @@ public class MainActivity extends AppCompatActivity {
 
         database = FirebaseDB.getDatabaseInstance();
 
-        reference = database.getReference().child("sanpham/");
-        reference.addValueEventListener(new ValueEventListener() {
+        reference = database.getReference("product");
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    // Lấy dữ liệu của từng user
-                    String id = userSnapshot.child("id").getValue(String.class);
-                    String name = userSnapshot.child("name").getValue(String.class);
-
-                    // Do something with the data
-                    Log.d("User", "Username: " + id + ", Email: " + name);
-                }
+                String id = snapshot.child("id").getValue(String.class);
+                String name = snapshot.child("name").getValue(String.class);
+                Log.i("TAG", "onDataChange: "+id+" "+name);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.i("TAG", "onCancelled: ");
+                Log.e("TAG", "onCancelled: "+ error.toString());
             }
         });
+//        reference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+////                String name = snapshot.getValue(String.class);
+////                Log.i("TAG", "onDataChange: "+name);
+//                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+//                    // Lấy dữ liệu của từng user
+//                    String id = userSnapshot.child("id").getValue(String.class);
+//                    String name = userSnapshot.child("name").getValue(String.class);
+//
+//                    // Do something with the data
+//                    Log.d("User", "Username: " + id + ", Email: " + name);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.i("TAG", "onCancelled: "+error.toString());
+//            }
+//        });
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
